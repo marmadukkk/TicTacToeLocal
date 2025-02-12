@@ -1,4 +1,4 @@
-#TIC TAC TOE LOCAL
+# Tic Tac Toe Local 
 
 # Game Logic
 
