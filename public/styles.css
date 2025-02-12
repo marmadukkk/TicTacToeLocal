@@ -1,39 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    margin: 1.5rem 0;
+    font-size: 2.5em;
 }
 
 #board {
-    width: 300px;
+    width: 320px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 5px;
+    gap: 10px;
     margin: 20px auto;
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
 .cell {
     width: 100px;
     height: 100px;
-    background: #f0f0f0;
-    border: 1px solid #333;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2em;
+    font-size: 3em;
     cursor: pointer;
+    transition: all 0.3s ease;
+    color: #4a5568;
+}
+
+.cell:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.cell[data-value="X"] {
+    color: #e53e3e;
+}
+
+.cell[data-value="O"] {
+    color: #3182ce;
 }
 
 #status {
     text-align: center;
-    font-size: 1.2em;
-    margin-top: 10px;
+    font-size: 1.3em;
+    margin: 25px auto;
+    color: #fff;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    width: fit-content;
+    max-width: 80%;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: statusFloat 2s ease-in-out infinite;
 }
 
-#nicknameInput,
-#joinBtn {
+
+#nicknameInput {
     display: block;
     margin: 20px auto;
+    padding: 12px 20px;
+    width: 250px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
 }
 
-h1 {
-    text-align: center;
+#nicknameInput:focus {
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: rgba(255,255,255,1);
+}
+
+#joinBtn {
+    display: block;
+    margin: 15px auto;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(45deg, #48bb78, #38a169);
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+#joinBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(72,187,120,0.4);
+}
+
+#joinBtn:active {
+    transform: translateY(0);
+}
+
+.game-over {
+    animation: pulse 1.5s infinite;
+}
+
+.winner-status {
+    color: #ffd700 !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.loser-status {
+    color: #1E90FF !important;
+    animation: rainShake 0.5s ease infinite;
+    text-shadow: 0 0 10px rgba(30, 144, 255, 0.3);
+}
+
+audio {
+    display: none; 
+}
+
+@media (max-width: 768px) {
+    #winSound, #loseSound {
+        volume: 0.5; 
+    }
+}
+
+@keyframes rainShake {
+    0% { transform: translateX(-2px); }
+    25% { transform: translateX(2px); }
+    50% { transform: translateY(2px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+}
+
+@keyframes statusFloat {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@media (max-width: 400px) {
+    #board {
+        width: 90%;
+    }
+    
+    .cell {
+        width: 100%;
+        height: 80px;
+    }
 }
