@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+  <title>Multiplayer Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <h1>Multiplayer Tic-Tac-Toe</h1>
+
+  <!-- input field for nickname with validation -->
+  <input type="text" id="nicknameInput" placeholder="Enter your nickname (3-15 characters, letters and numbers only)" />
+  <button id="joinBtn">Join Game</button>
+
+  <!-- loading spinner while waiting for opponent -->
+  <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+
+  <!-- game status and board -->
+  <div id="status"></div>
+  <div id="board"></div>
+
+  <!-- play again button (hidden by default) -->
+  <button id="playAgainBtn" style="display: none;">Play Again</button>
+
+  <!-- external libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+
+  <!-- sound effects with lazy loading -->
+  <audio id="winSound" data-src="https://assets.mixkit.co/active_storage/sfx/257/257-preview.mp3"></audio>
+  <audio id="loseSound" data-src="https://assets.mixkit.co/active_storage/sfx/259/259-preview.mp3"></audio>
+</body>
+
+</html>
