@@ -16,3 +16,24 @@ A Tic Tac Toe implementation with multiplayer functionality using HTML, JavaScri
 - **Multiplayer** — Allows two players to compete against each other in real-time
 - **User-friendly UI**
 - **Socket.IO** — For real-time communications
+
+## Getting Started
+
+## Getting Started
+
+### To Start the Server
+1. **Install Dependencies:**
+   - Run the following command in your terminal:
+     ```
+     npm install
+     ```
+
+2. **Start the Server:**
+   - Use the command:
+     ```
+     npm start
+     ```
+
+### Client Side
+- Open `index.html` (or just the main page of the site using the server's IP address and the specified port).
+
