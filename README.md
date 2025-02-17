@@ -1,29 +1,16 @@
-# Tic Tac Toe Local ❌⭕
+# Tic Tac Toe ❌⭕
 
-# Game Logic
+TIcTacToe implementation with multiplayer on html,js,css on client side and node.js for server.
+**Files**
+Client:
+    - index.html — main html file
+    - style.css — styles
+    - script.js — client part of logic(connect to server, send/recieve/process data)
+Server:
+    - server.js — server part of logic(handle connections, handle maked moves, other game logic
+    
+**Features**
+    - Multiplayer — allows two players to compete against each other in real-time
+    - User-friendly UI
+    - Socket.IO for communications
 
-- 3x3 desk filled with nulls (initial state)
-- Two types of elements: `x` or `o`
-- Win patterns:
-  - Horizontal: 3 same elements
-  - Vertical: 3 same elements
-  - Diagonal: 3 same elements
-
-- If desk is fully filled but no win patterns on it, end game.
-
-# Client
-
-- Able to connect to server
-- Able to start game
-- Able to send moves
-- Able to receive other client (opponent) moves
-- Able to receive game status
-
-# Server
-- able to handle connnection of clients
-
-- able to handle moves
-
-- able to send results to clients
-
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=GL+HF)](https://git.io/typing-svg)
