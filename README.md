@@ -19,8 +19,6 @@ A Tic Tac Toe implementation with multiplayer functionality using HTML, JavaScri
 
 ## Getting Started
 
-## Getting Started
-
 ### To Start the Server
 1. **Install Dependencies:**
    - Run the following command in your terminal:
