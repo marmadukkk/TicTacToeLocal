@@ -1,18 +1,18 @@
 # Tic Tac Toe ❌⭕
 
-TIcTacToe implementation with multiplayer on html,js,css on client side and node.js for server.
-**Files**
-Client:
+A Tic Tac Toe implementation with multiplayer functionality using HTML, JavaScript, and CSS (on the client side) and Node.js for server.
 
-    - index.html — main html file
-    - style.css — styles
-    - script.js — client part of logic(connect to server, send/recieve/process data)
-Server:
+## Files
 
-    - server.js — server part of logic(handle connections, handle maked moves, other game logic
-    
-**Features**
-    - Multiplayer — allows two players to compete against each other in real-time
-    - User-friendly UI
-    - Socket.IO for communications
+### Client
+- **index.html** — Main HTML file
+- **style.css** — Styles
+- **script.js** — Client-side logic (connects to server, sends/receives/processes data)
 
+### Server
+- **server.js** — Server-side logic (handles connections, processes moves, and other game logic)
+
+## Features
+- **Multiplayer** — Allows two players to compete against each other in real-time
+- **User-friendly UI**
+- **Socket.IO** — For real-time communications
