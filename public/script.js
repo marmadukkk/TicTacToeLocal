@@ -1,114 +1,98 @@
 const socket = io();
 
-//define ingame variables for future values
-let gameId = null;
-let mySymbol = null;
-let myNickname = null;
+// Определение переменных для хранения данных игры
+let gameId = null; // ID текущей игры
+let mySymbol = null; // Символ текущего игрока (X или O)
+let myNickname = null; // Никнейм текущего игрока
 
-//get elements from html page
-const nicknameInput = document.getElementById("nicknameInput");
-const joinBtn = document.getElementById("joinBtn");
-const statusDiv = document.getElementById("status");
-const boardDiv = document.getElementById("board");
+// Получение элементов из HTML
+const nicknameInput = document.getElementById("nicknameInput"); // Поле ввода никнейма
+const joinBtn = document.getElementById("joinBtn"); // Кнопка "Присоединиться к игре"
+const statusDiv = document.getElementById("status"); // Элемент для отображения статуса игры
+const boardDiv = document.getElementById("board"); // Элемент игрового поля
 
-// create the 3x3 grid of cells (default in tictactoe)
+// Создание сетки 3x3 для игры в крестики-нолики
 const cells = [];
 for (let i = 0; i < 9; i++) {
   const cell = document.createElement("div");
-  cell.classList.add("cell");
+  cell.classList.add("cell"); // Добавляем класс для стилизации ячейки
   cell.addEventListener("click", () => {
-    // only move if we have a game running and a symbol (o,x) assigned to current player
+    // Обработчик клика по ячейке
+    // Ход возможен только если игра активна и у игрока есть символ (X или O)
     if (gameId && mySymbol) {
-      socket.emit("makeMove", { gameId, index: i });
+      socket.emit("makeMove", { gameId, index: i }); // Отправляем ход на сервер
     }
   });
-  boardDiv.appendChild(cell); //add to page as element to show to user
-  cells.push(cell); //add to array with cells for storing
+  boardDiv.appendChild(cell); // Добавляем ячейку на страницу
+  cells.push(cell); // Сохраняем ячейку в массив для дальнейшего использования
 }
 
-//  join game
+// Обработчик нажатия на кнопку "Присоединиться к игре"
 joinBtn.addEventListener("click", () => {
-  myNickname = nicknameInput.value.trim();
+  myNickname = nicknameInput.value.trim(); // Получаем никнейм из поля ввода
   if (!myNickname) {
-    alert("cant be null, enter something as nickname");
+    alert("Никнейм не может быть пустым. Введите что-нибудь."); // Проверка на пустой никнейм
     return;
   }
-  socket.emit("joinGame", myNickname);
+  socket.emit("joinGame", myNickname); // Отправляем запрос на присоединение к игре
 });
 
-// Socket listeners
+// Слушатель события "waiting" (ожидание второго игрока)
 socket.on("waiting", (message) => {
-  statusDiv.textContent = message;
+  statusDiv.textContent = message; // Обновляем статус
 });
 
-//handle game start
+// Слушатель события "gameStarted" (игра началась)
 socket.on("gameStarted", (data) => {
-  gameId = data.gameId;
-  mySymbol = data.symbol;
-  const opponentNickname = data.opponent;
-  statusDiv.textContent = `game started. you are ${mySymbol}. opponent is: ${opponentNickname}`;
+  gameId = data.gameId; // Сохраняем ID игры
+  mySymbol = data.symbol; // Сохраняем символ текущего игрока
+  const opponentNickname = data.opponent; // Получаем никнейм оппонента
+  statusDiv.textContent = `Игра началась. Вы играете за ${mySymbol}. Ваш оппонент: ${opponentNickname}`;
 
-  // Clear the board
+  // Очищаем игровое поле
   cells.forEach((cell) => (cell.textContent = ""));
 });
 
-// handle updateBoard to update the game state
+// Слушатель события "updateBoard" (обновление состояния игрового поля)
 socket.on("updateBoard", (data) => {
-  // extract the current board state and whose turn it is
-  const { board, currentTurn } = data;
+  const { board, currentTurn } = data; // Получаем текущее состояние поля и чей ход
 
-  // update the text content of each cell in the game board
+  // Обновляем содержимое каждой ячейки
   for (let i = 0; i < 9; i++) {
-    // if the cell is filled, display the symbol; if not, clear the cell
-    cells[i].textContent = board[i] ? board[i] : "";
+    cells[i].textContent = board[i] ? board[i] : ""; // Если ячейка заполнена, отображаем символ
   }
 
-  // update the status to show whose turn it is
-  statusDiv.textContent = `${currentTurn}'s turn`;
+  // Обновляем статус, чтобы показать, чей сейчас ход
+  statusDiv.textContent = `Ход игрока ${currentTurn}`;
 });
 
-// socket.on('gameOver', (data) => {
-//     const { board, winner } = data;
-//     for (let i = 0; i < 9; i++) {
-//         cells[i].textContent = board[i] ? board[i] : '';
-//     }
-//     if (winner) {
-//         if (winner === myNickname) {
-//             statusDiv.textContent = 'You won';
-//         } else {
-//             statusDiv.textContent = `${winner} won`;
-//         }
-//     } else {
-//         statusDiv.textContent = "draw, no winner";
-//     }
-// });
-
+// Слушатель события "gameOver" (игра завершена)
 socket.on("gameOver", (data) => {
-  const winAudio = document.getElementById("winSound");
-  const loseAudio = document.getElementById("loseSound");
+  const winAudio = document.getElementById("winSound"); // Аудио для победы
+  const loseAudio = document.getElementById("loseSound"); // Аудио для поражения
 
-  // reset and stop previous sounds
+  // Сбрасываем и останавливаем предыдущие звуки
   winAudio.pause();
   winAudio.currentTime = 0;
   loseAudio.pause();
   loseAudio.currentTime = 0;
 
-  // update the board
+  // Обновляем игровое поле
   const { board, winner } = data;
   for (let i = 0; i < 9; i++) {
     cells[i].textContent = board[i] ? board[i] : "";
   }
 
-  // handle status and effects
+  // Обработка статуса и эффектов
   if (winner) {
     if (winner === myNickname) {
-      // victory effects
-      winAudio.play();
-      statusDiv.textContent = "🎉 You won!";
-      statusDiv.classList.add("winner-status");
+      // Эффекты победы
+      winAudio.play(); // Воспроизводим звук победы
+      statusDiv.textContent = "🎉 Вы победили!";
+      statusDiv.classList.add("winner-status"); // Добавляем класс для стилизации победы
       statusDiv.classList.remove("loser-status");
 
-      // confetti animation
+      // Анимация конфетти
       const duration = 3000;
       const end = Date.now() + duration;
       (function frame() {
@@ -129,13 +113,13 @@ socket.on("gameOver", (data) => {
         if (Date.now() < end) requestAnimationFrame(frame);
       })();
     } else {
-      // defeat effects
-      loseAudio.play();
-      statusDiv.textContent = "😢 You lost...";
-      statusDiv.classList.add("loser-status");
+      // Эффекты поражения
+      loseAudio.play(); // Воспроизводим звук поражения
+      statusDiv.textContent = "😢 Вы проиграли...";
+      statusDiv.classList.add("loser-status"); // Добавляем класс для стилизации поражения
       statusDiv.classList.remove("winner-status");
 
-      // rain animation
+      // Анимация дождя
       const count = 200;
       const defaults = {
         origin: { y: 0 },
@@ -160,20 +144,21 @@ socket.on("gameOver", (data) => {
       fire(0.2, { spread: 150 });
     }
   } else {
-    // draw
-    statusDiv.textContent = "🤝 Draw!";
+    // Ничья
+    statusDiv.textContent = "🤝 Ничья!";
     statusDiv.classList.remove("winner-status", "loser-status");
   }
 
-  // reset game after 5 seconds
+  // Сброс игры через 5 секунд
   setTimeout(() => {
     gameId = null;
     mySymbol = null;
-    statusDiv.textContent = 'Press "Join Game" to start new match';
+    statusDiv.textContent = 'Нажмите "Присоединиться к игре", чтобы начать новую партию';
     statusDiv.classList.remove("winner-status", "loser-status");
   }, 5000);
 });
 
+// Слушатель события "opponentDisconnected" (оппонент отключился)
 socket.on("opponentDisconnected", () => {
-  statusDiv.textContent = "opponent disconnected";
+  statusDiv.textContent = "Оппонент отключился";
 });
